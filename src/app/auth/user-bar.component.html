@@ -1,5 +1,7 @@
 <mat-toolbar>
-  <h1>My Toolbar</h1>
+  <button mat-button>
+    <h1>Star Chart</h1>
+  </button>
   <span fxFlex></span>
 
   <ng-container *ngIf="afAuth.user | async as user; else showLogin">
