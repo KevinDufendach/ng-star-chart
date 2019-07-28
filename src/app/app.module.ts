@@ -15,12 +15,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
+import { EditRulesComponent } from './edit-rules/edit-rules.component';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import {FlexModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
     AppComponent,
     PrivacyPolicyComponent,
     DashboardComponent,
+    EditRulesComponent,
+    MainNavComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +49,14 @@ import { LayoutModule } from '@angular/cdk/layout';
 
     MatButtonModule,
 
-    LayoutModule
+    LayoutModule,
+
+    MatToolbarModule,
+
+    MatSidenavModule,
+
+    MatListModule,
+    FlexModule
   ],
   providers: [],
   bootstrap: [AppComponent]
