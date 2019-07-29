@@ -21,6 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import {FlexModule} from '@angular/flex-layout';
+import { CreateHouseholdComponent } from './create-household/create-household.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {FlexModule} from '@angular/flex-layout';
     DashboardComponent,
     EditRulesComponent,
     MainNavComponent,
+    CreateHouseholdComponent,
   ],
   imports: [
     BrowserModule,
