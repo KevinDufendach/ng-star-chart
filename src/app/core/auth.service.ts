@@ -17,6 +17,7 @@ export class AuthService {
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
               private router: Router) {
+    //// Get auth data, then get firestore user document || null
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
@@ -36,7 +37,7 @@ export class AuthService {
   private oAuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        this.updateuserData(credential.user);
+        this.updateUserData(credential.user);
       });
   }
 
@@ -44,7 +45,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  private updateuserData(user) {
+  private updateUserData(user) {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data: User = {
