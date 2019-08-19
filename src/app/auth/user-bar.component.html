@@ -4,12 +4,19 @@
   </button>
   <span fxFlex></span>
 
-  <ng-container *ngIf="afAuth.user | async as user; else showLogin">
-    <p>Hello {{ user.displayName }}!</p>
-    <button mat-raised-button (click)="logout()">Logout</button>
+  <ng-container *ngIf="auth.user$ | async; then authenticated else showLogin">
+
   </ng-container>
+
+  <ng-template #authenticated>
+    <ng-container *ngIf="auth.user$ | async as user">
+      <p>Hello {{ user.displayName }}!</p>
+      <button mat-raised-button (click)="auth.signOut()">Logout</button>
+    </ng-container>
+  </ng-template>
+
   <ng-template #showLogin>
     <p>Please login.</p>
-    <button mat-raised-button (click)="login()">Login with Google</button>
+    <button mat-raised-button (click)="auth.googleLogin()">Login with Google</button>
   </ng-template>
 </mat-toolbar>
