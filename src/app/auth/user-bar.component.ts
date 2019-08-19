@@ -1,6 +1,5 @@
 import { Component} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {auth} from 'firebase/app';
+import {AuthService} from '../core/auth.service';
 
 @Component({
   selector: 'app-user-bar',
@@ -8,13 +7,7 @@ import {auth} from 'firebase/app';
   styleUrls: ['./user-bar.component.scss']
 })
 export class UserBarComponent {
+  canEdit;
 
-  constructor(public afAuth: AngularFireAuth) { }
-
-  login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-  }
-  logout() {
-    this.afAuth.auth.signOut();
-  }
+  constructor(public auth: AuthService) { }
 }
