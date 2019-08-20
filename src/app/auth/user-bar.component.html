@@ -1,4 +1,12 @@
 <mat-toolbar>
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="_notifyMenuClicked()"
+    *ngIf="showMenuBar">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
   <button mat-button>
     <h1>Star Chart</h1>
   </button>
@@ -10,7 +18,7 @@
 
   <ng-template #authenticated>
     <ng-container *ngIf="auth.user$ | async as user">
-      <p>Hello {{ user.displayName }}!</p>
+      <p>Hello, {{ user.displayName }}!</p>
       <button mat-raised-button (click)="auth.signOut()">Logout</button>
     </ng-container>
   </ng-template>

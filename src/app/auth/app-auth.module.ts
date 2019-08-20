@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {UserBarComponent} from './user-bar.component';
-import {MatButtonModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/material';
 import {FlexModule} from '@angular/flex-layout';
 
 
@@ -17,7 +17,8 @@ import {FlexModule} from '@angular/flex-layout';
     CommonModule,
     MatToolbarModule,
     FlexModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class AppAuthModule { }

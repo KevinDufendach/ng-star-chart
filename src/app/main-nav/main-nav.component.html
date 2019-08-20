@@ -11,28 +11,29 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <button mat-button>
-        <h1>Star Chart</h1>
-      </button>
-      <span fxFlex></span>
-      <ng-container *ngIf="afAuth.user | async as user; else showLogin">
-        <p>Hello {{ user.displayName }}!</p>
-        <button mat-raised-button (click)="logout()">Logout</button>
-      </ng-container>
-      <ng-template #showLogin>
-        <p>Please login.</p>
-        <button mat-raised-button (click)="login()">Login with Google</button>
-      </ng-template>
-    </mat-toolbar>
+    <app-user-bar [showMenuBar]="isHandset$ | async" (menuButtonClick)="drawer.toggle()"></app-user-bar>
+<!--    <mat-toolbar color="primary">-->
+<!--      <button-->
+<!--        type="button"-->
+<!--        aria-label="Toggle sidenav"-->
+<!--        mat-icon-button-->
+<!--        (click)="drawer.toggle()"-->
+<!--        *ngIf="isHandset$ | async">-->
+<!--        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>-->
+<!--      </button>-->
+<!--      <button mat-button>-->
+<!--        <h1>Star Chart</h1>-->
+<!--      </button>-->
+<!--      <span fxFlex></span>-->
+<!--      <ng-container *ngIf="afAuth.user | async as user; else showLogin">-->
+<!--        <p>Hello {{ user.displayName }}!</p>-->
+<!--        <button mat-raised-button (click)="logout()">Logout</button>-->
+<!--      </ng-container>-->
+<!--      <ng-template #showLogin>-->
+<!--        <p>Please login.</p>-->
+<!--        <button mat-raised-button (click)="login()">Login with Google</button>-->
+<!--      </ng-template>-->
+<!--    </mat-toolbar>-->
     <!-- Add Content Here -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>

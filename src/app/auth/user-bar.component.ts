@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AuthService} from '../core/auth.service';
 
 @Component({
@@ -7,7 +7,15 @@ import {AuthService} from '../core/auth.service';
   styleUrls: ['./user-bar.component.scss']
 })
 export class UserBarComponent {
+  @Input() showMenuBar: boolean;
+  @Output() menuButtonClick = new EventEmitter<null>();
+
   canEdit;
+
+  _notifyMenuClicked() {
+    this.menuButtonClick.emit();
+  }
+
 
   constructor(public auth: AuthService) { }
 }

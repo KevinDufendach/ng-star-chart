@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import * as firebase from 'firebase';
+import UserCredential = firebase.auth.UserCredential;
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +35,20 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
-  private oAuthLogin(provider) {
+  private oAuthLogin(provider): Promise<void | UserCredential> {
+    console.log('starting oAuthLogin');
+
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        this.updateUserData(credential.user);
+        console.log('user retrieved: ' + credential.user.displayName);
+
+        this.updateUserData(credential.user)
+          .then( () => {
+            console.log('user successfully written');
+          })
+          .catch( () => {
+            console.log('error writing user');
+          });
       });
   }
 
@@ -45,7 +56,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  private updateUserData(user) {
+  private updateUserData(user): Promise<void> {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data: User = {
