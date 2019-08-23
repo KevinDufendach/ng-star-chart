@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Observable} from 'rxjs';
+import {map, share} from 'rxjs/operators';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase/app';
 
@@ -18,11 +18,13 @@ export class MainNavComponent {
       share()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, public afAuth: AngularFireAuth) {}
+  constructor(private breakpointObserver: BreakpointObserver, public afAuth: AngularFireAuth) {
+  }
 
   login() {
     this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
   }
+
   logout() {
     this.afAuth.auth.signOut();
   }
