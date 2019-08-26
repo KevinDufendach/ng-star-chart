@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HouseholdManagerService} from '../core/household-manager.service';
 
 @Component({
   selector: 'app-create-household',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateHouseholdComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private hm: HouseholdManagerService
+  ) { }
 
   ngOnInit() {
   }
 
+  createHousehold() {
+    this.hm.createHousehold('My Household');
+  }
 }

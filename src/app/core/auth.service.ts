@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {User} from './user';
+import {AppUser} from './app-user';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
@@ -13,7 +13,7 @@ import UserCredential = firebase.auth.UserCredential;
 })
 export class AuthService {
 
-  user$: Observable<User>;
+  user$: Observable<AppUser>;
 
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
@@ -22,7 +22,7 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.afs.doc<AppUser>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
@@ -59,7 +59,7 @@ export class AuthService {
   private updateUserData(user): Promise<void> {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const data: User = {
+    const data: AppUser = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
@@ -74,23 +74,23 @@ export class AuthService {
   // Abilities and roles authorization
   // Assign roles to an ability method
 
-  canRead(user: User): boolean {
+  canRead(user: AppUser): boolean {
     const allowed = ['admin', 'editor', 'subscriber'];
     return this.checkAuthorization(user, allowed);
   }
 
-  canEdit(user: User): boolean {
+  canEdit(user: AppUser): boolean {
     const allowed = ['admin', 'editor'];
     return this.checkAuthorization(user, allowed);
   }
 
-  canDelete(user: User): boolean {
+  canDelete(user: AppUser): boolean {
     const allowed = ['admin'];
     return this.checkAuthorization(user, allowed);
   }
 
   // determines if user has matching role
-  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+  private checkAuthorization(user: AppUser, allowedRoles: string[]): boolean {
     if (!user) {
       return false;
     }
