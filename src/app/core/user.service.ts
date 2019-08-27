@@ -5,8 +5,8 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
-import * as firebase from 'firebase';
-import UserCredential = firebase.auth.UserCredential;
+import { auth } from 'firebase/app';
+import UserCredential = auth.UserCredential;
 
 @Injectable({
   providedIn: 'root'
@@ -31,24 +31,14 @@ export class UserService {
   }
 
   googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   private oAuthLogin(provider): Promise<void | UserCredential> {
-    console.log('starting oAuthLogin');
-
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        console.log('user retrieved: ' + credential.user.displayName);
-
-        this.updateUserData(credential.user)
-          .then( () => {
-            console.log('user successfully written');
-          })
-          .catch( () => {
-            console.log('error writing user');
-          });
+        this.updateUserData(credential.user);
       });
   }
 
