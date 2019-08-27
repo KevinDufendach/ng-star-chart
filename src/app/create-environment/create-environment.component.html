@@ -14,13 +14,13 @@
   </ng-container>
 </ng-container>
 
-<ng-container *ngIf="hms.environmentId; then exists else createNew">
+<ng-container *ngIf="hms.environment; then exists else createNew">
 
 </ng-container>
 
 <ng-template #exists>
   <h2>Current Environment: {{hms.environment.displayName}}</h2>
-  <button mat-raised-button routerLink="/environment/edit/{{hms.environmentId}}">Edit Environment</button>
+  <button mat-raised-button routerLink="/environment/edit/{{hms.environment.id}}">Edit Environment</button>
 </ng-template>
 
 <ng-template #createNew>

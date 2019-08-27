@@ -5,19 +5,17 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
-import { auth } from 'firebase/app';
+import {auth, User} from 'firebase/app';
 import UserCredential = auth.UserCredential;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
   user$: Observable<AppUser>;
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,
-              private router: Router) {
+              private afs: AngularFirestore) {
     //// Get auth data, then get firestore user document || null
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -38,7 +36,7 @@ export class UserService {
   private oAuthLogin(provider): Promise<void | UserCredential> {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        this.updateUserData(credential.user);
+        this.updateUserWithAuthData(credential.user);
       });
   }
 
@@ -46,7 +44,7 @@ export class UserService {
     this.afAuth.auth.signOut();
   }
 
-  private updateUserData(user): Promise<void> {
+  private updateUserWithAuthData(user: User): Promise<void> {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data: AppUser = {
@@ -59,6 +57,13 @@ export class UserService {
     };
 
     return userRef.set(data, {merge: true});
+  }
+
+  private updateUserData(user: AppUser): Promise<void> {
+    console.log(user);
+
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    return userRef.set(user, {merge: true});
   }
 
   // Abilities and roles authorization
@@ -92,5 +97,16 @@ export class UserService {
     }
 
     return false;
+  }
+
+  setDefaultEnvironment(envId: string) {
+    //// Get auth data, then get firestore user document || null
+    this.user$.subscribe(appUser => {
+      if (appUser) {
+        appUser.defaultEnvironment = envId;
+
+        this.updateUserData(appUser);
+      }
+    });
   }
 }

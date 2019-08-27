@@ -1,5 +1,11 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument,
+  DocumentReference,
+  QueryDocumentSnapshot
+} from '@angular/fire/firestore';
 import {Environment, EnvironmentPrivateData} from './environment';
 import {UserService} from './user.service';
 import {Observable} from 'rxjs';
@@ -8,23 +14,18 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class EnvironmentManagerService {
+  private environment$: Environment;
 
   constructor(
     private afs: AngularFirestore,
     private appAuth: UserService,
-  ) { }
-
-  get environmentId(): string {
-    return this._environmentId;
+  ) {
+    this.appAuth.user$.subscribe( user => {
+      if (user && user.defaultEnvironment && !this.isCurrentEnvironment(user.defaultEnvironment)) {
+        this.setEnvironment(user.defaultEnvironment);
+      }
+    });
   }
-
-  get environment(): Environment {
-    return this._environment;
-  }
-  // tslint:disable-next-line:variable-name
-  private _environmentId: string;
-  // tslint:disable-next-line:variable-name
-  private _environment: Environment;
 
   private static docRefToEnvironment(doc: QueryDocumentSnapshot<any>): Environment {
     const hh: Environment = doc.data() as Environment;
@@ -32,45 +33,51 @@ export class EnvironmentManagerService {
     return hh;
   }
 
+  private isCurrentEnvironment(envId: string) {
+    return (this.environment$ && this.environment$.id === envId);
+  }
+
+  get environment(): Environment {
+    return this.environment$;
+  }
+
   createEnvironment(displayName: string) {
+
     this.appAuth.user$.subscribe((user) => {
       if (user) {
         // const environmentCollectionRef: AngularFirestoreCollection<any> = this.afs.collection('environments');
-        const environmentColRef: AngularFirestoreCollection<any> = this.afs.collection('environments');
-
-        console.log(environmentColRef.ref.id);
+        const newDocId = this.afs.createId();
+        const newEnvDoc: AngularFirestoreDocument = this.afs.collection('environments').doc(newDocId);
 
         const data: Environment = {
           displayName,
           members: [],
-          users: [user.uid]
+          users: [user.uid],
+          id: newDocId,
         };
 
-        this._environment = data;
+        this.environment$ = data;
 
-        environmentColRef.add(data).then(d => {
-          this._environmentId = d.id;
-
+        newEnvDoc.set(data).then(d => {
+          // Add creator as owner of new environment
           const privateData: EnvironmentPrivateData = {
             roles: {}
           };
-
           privateData.roles[user.uid] = 'owner';
 
-          d.collection('private_data').doc('private').set(privateData);
+          newEnvDoc.collection('private_data').doc('private').set(privateData);
         });
       } else {
         console.log('user not logged in');
       }
     });
-
   }
 
   setEnvironment(id: string) {
     this.getEnvironment(id).subscribe( environment => {
       if (environment) {
-        this._environmentId = id;
-        this._environment = environment;
+        this.environment$ = environment;
+        this.environment$.id = id;
       }
     });
   }

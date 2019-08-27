@@ -2,7 +2,7 @@ export interface Environment {
   displayName: string;
   members: Array<EnvironmentMember>;
   users: Array<string>;
-  id?: string;
+  id: string;
   // privateData: EnvironmentPrivateData;
 }
 
