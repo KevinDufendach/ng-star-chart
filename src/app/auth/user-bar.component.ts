@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AuthService} from '../core/auth.service';
+import {UserService} from '../core/user.service';
 
 @Component({
   selector: 'app-user-bar',
@@ -17,5 +17,5 @@ export class UserBarComponent {
   }
 
 
-  constructor(public auth: AuthService) { }
+  constructor(public auth: UserService) { }
 }

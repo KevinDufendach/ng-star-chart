@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 import {Environment, EnvironmentPrivateData} from './environment';
-import {AuthService} from './auth.service';
+import {UserService} from './user.service';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class EnvironmentManagerService {
 
   constructor(
     private afs: AngularFirestore,
-    private appAuth: AuthService,
+    private appAuth: UserService,
   ) { }
 
   get environmentId(): string {

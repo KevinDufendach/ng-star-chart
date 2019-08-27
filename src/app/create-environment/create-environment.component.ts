@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {EnvironmentManagerService} from '../core/environment-manager.service';
-import {AuthService} from '../core/auth.service';
+import {UserService} from '../core/user.service';
 import {Environment} from '../core/environment';
 
 @Component({
@@ -13,7 +13,7 @@ export class CreateEnvironmentComponent implements OnInit {
 
   constructor(
     public hms: EnvironmentManagerService,
-    public appAuth: AuthService
+    public appAuth: UserService
   ) { }
 
   ngOnInit() {

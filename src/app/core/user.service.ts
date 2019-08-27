@@ -11,7 +11,7 @@ import UserCredential = firebase.auth.UserCredential;
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class UserService {
 
   user$: Observable<AppUser>;
 
