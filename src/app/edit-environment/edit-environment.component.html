@@ -1,4 +1,4 @@
-<div *ngIf="household; then editDetails else loading"></div>
+<div *ngIf="environment; then editDetails else loading"></div>
 
 <ng-template #loading>
   <mat-spinner></mat-spinner>
@@ -6,24 +6,24 @@
 </ng-template>
 
 <ng-template #editDetails>
-  <h1>Edit "{{household.displayName}}" Details</h1>
+  <h1>Edit "{{environment.displayName}}" Details</h1>
 
-  <form #householdForm="ngForm">
+  <form #environmentForm="ngForm">
     <mat-form-field>
-      <input matInput placeholder="Name" [(ngModel)]="household.displayName" name="displayName">
+      <input matInput placeholder="Name" [(ngModel)]="environment.displayName" name="displayName">
     </mat-form-field>
 
     <h2>Members:</h2>
-    <div *ngFor="let member of household.members">
+    <div *ngFor="let member of environment.members">
       <mat-form-field>
         <input matInput placeholder="Name" [(ngModel)]="member.displayName" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
       <button mat-icon-button (click)="delete(member)">delete</button>
     </div>
-    <button mat-icon-button (click)="addHouseholdMember()"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button (click)="addEnvironmentMember()"><mat-icon>add</mat-icon></button>
 
     <ul>
-      <li *ngFor="let member of household.members">{{member.displayName}}</li>
+      <li *ngFor="let member of environment.members">{{member.displayName}}</li>
     </ul>
 
     <button mat-raised-button (click)="save()">Save</button>

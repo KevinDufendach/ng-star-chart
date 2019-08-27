@@ -20,8 +20,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {FlexModule} from '@angular/flex-layout';
-import {CreateHouseholdComponent} from './create-household/create-household.component';
-import { EditHouseholdComponent } from './edit-household/edit-household.component';
+import {CreateEnvironmentComponent} from './create-environment/create-environment.component';
+import { EditEnvironmentComponent } from './edit-environment/edit-environment.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -34,8 +34,8 @@ import {FormsModule} from '@angular/forms';
     DashboardComponent,
     EditRulesComponent,
     MainNavComponent,
-    CreateHouseholdComponent,
-    EditHouseholdComponent,
+    CreateEnvironmentComponent,
+    EditEnvironmentComponent,
   ],
   imports: [
     BrowserModule,

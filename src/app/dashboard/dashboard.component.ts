@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import {HouseholdManagerService} from '../core/household-manager.service';
+import {EnvironmentManagerService} from '../core/environment-manager.service';
 
 @Component({
   selector: 'app-dashboard',
