@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {UserBarComponent} from './user-bar.component';
 import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/material';
 import {FlexModule} from '@angular/flex-layout';
+import {RouterModule} from "@angular/router";
 
 
 
@@ -18,7 +19,8 @@ import {FlexModule} from '@angular/flex-layout';
     MatToolbarModule,
     FlexModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ]
 })
 export class AppAuthModule { }

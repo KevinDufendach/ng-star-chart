@@ -21,6 +21,11 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {FlexModule} from '@angular/flex-layout';
 import {CreateHouseholdComponent} from './create-household/create-household.component';
+import { EditHouseholdComponent } from './edit-household/edit-household.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,7 @@ import {CreateHouseholdComponent} from './create-household/create-household.comp
     EditRulesComponent,
     MainNavComponent,
     CreateHouseholdComponent,
+    EditHouseholdComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +55,11 @@ import {CreateHouseholdComponent} from './create-household/create-household.comp
     LayoutModule,
 
     MatListModule,
-    FlexModule
+    FlexModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

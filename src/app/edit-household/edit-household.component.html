@@ -1,0 +1,32 @@
+<div *ngIf="household; then editDetails else loading"></div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+  <h2>Loading...</h2>
+</ng-template>
+
+<ng-template #editDetails>
+  <h1>Edit "{{household.displayName}}" Details</h1>
+
+  <form #householdForm="ngForm">
+    <mat-form-field>
+      <input matInput placeholder="Name" [(ngModel)]="household.displayName" name="displayName">
+    </mat-form-field>
+
+    <h2>Members:</h2>
+    <div *ngFor="let member of household.members">
+      <mat-form-field>
+        <input matInput placeholder="Name" [(ngModel)]="member.displayName" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+      <button mat-icon-button (click)="delete(member)">delete</button>
+    </div>
+    <button mat-icon-button (click)="addHouseholdMember()"><mat-icon>add</mat-icon></button>
+
+    <ul>
+      <li *ngFor="let member of household.members">{{member.displayName}}</li>
+    </ul>
+
+    <button mat-raised-button (click)="save()">Save</button>
+  </form>
+
+</ng-template>

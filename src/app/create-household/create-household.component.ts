@@ -9,7 +9,7 @@ import {HouseholdManagerService} from '../core/household-manager.service';
 export class CreateHouseholdComponent implements OnInit {
 
   constructor(
-    private hm: HouseholdManagerService
+    public hm: HouseholdManagerService
   ) { }
 
   ngOnInit() {
@@ -17,5 +17,9 @@ export class CreateHouseholdComponent implements OnInit {
 
   createHousehold() {
     this.hm.createHousehold('My Household');
+  }
+
+  editHousehold() {
+
   }
 }
