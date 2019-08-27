@@ -36,4 +36,9 @@ export class CreateEnvironmentComponent implements OnInit {
       this.environments = value;
     });
   }
+
+  setEnvironment(id: string) {
+    this.hms.setEnvironment(id);
+    this.appAuth.setDefaultEnvironment(id);
+  }
 }

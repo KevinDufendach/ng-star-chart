@@ -5,24 +5,21 @@
         <mat-card-title>Environments for {{ user.displayName }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
+        <h2>Select Environment</h2>
         <div *ngFor="let environment of environments">
-          <h2>Select Environment</h2>
-          <button mat-raised-button (click)="hms.setEnvironment(environment.id)">{{environment.displayName}}</button>
+          <button mat-raised-button (click)="setEnvironment(environment.id)">{{environment.displayName}}</button>
         </div>
       </mat-card-content>
     </mat-card>
   </ng-container>
 </ng-container>
 
-<ng-container *ngIf="hms.environment; then exists else createNew">
+<div *ngIf="hms.environment">
+  <h2>
+    <span>Current Environment: {{hms.environment.displayName}} </span>
+    <button mat-raised-button routerLink="/environment/edit/{{hms.environment.id}}">Edit Environment</button>
+  </h2>
 
-</ng-container>
+</div>
 
-<ng-template #exists>
-  <h2>Current Environment: {{hms.environment.displayName}}</h2>
-  <button mat-raised-button routerLink="/environment/edit/{{hms.environment.id}}">Edit Environment</button>
-</ng-template>
-
-<ng-template #createNew>
-  <button mat-raised-button (click)="createEnvironment()">Create Environment</button>
-</ng-template>
+<button mat-raised-button (click)="createEnvironment()">Create New Environment</button>

@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {AppUser} from './app-user';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {auth, User} from 'firebase/app';
@@ -59,11 +58,11 @@ export class UserService {
     return userRef.set(data, {merge: true});
   }
 
-  private updateUserData(user: AppUser): Promise<void> {
-    console.log(user);
+  private updateUserData(uid: string, newData: any): Promise<void> {
 
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    return userRef.set(user, {merge: true});
+
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+    return userRef.update(newData);
   }
 
   // Abilities and roles authorization
@@ -100,13 +99,19 @@ export class UserService {
   }
 
   setDefaultEnvironment(envId: string) {
-    //// Get auth data, then get firestore user document || null
-    this.user$.subscribe(appUser => {
-      if (appUser) {
-        appUser.defaultEnvironment = envId;
+    if (this.user$) {
+      this.user$.subscribe(appUser => {
+        this.updateUserData(appUser.uid, {defaultEnvironment: envId} );
+      });
+    }
 
-        this.updateUserData(appUser);
-      }
-    });
+    // //// Get auth data, then get firestore user document || null
+    // this.user$.subscribe(appUser => {
+    //   if (appUser) {
+    //     appUser.defaultEnvironment = envId;
+    //
+    //     this.updateUserData(appUser);
+    //   }
+    // });
   }
 }

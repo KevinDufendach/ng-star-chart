@@ -80,6 +80,8 @@ export class EnvironmentManagerService {
         this.environment$.id = id;
       }
     });
+
+    // this.appAuth.setDefaultEnvironment(id);
   }
 
   updateEnvironment(id: string, data: Environment) {
