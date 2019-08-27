@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 import {Household, HouseholdPrivateData} from './household';
 import {AuthService} from './auth.service';
 import {Observable} from 'rxjs';
@@ -8,15 +8,28 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class HouseholdManagerService {
+
+  constructor(
+    private afs: AngularFirestore,
+    private appAuth: AuthService,
+  ) { }
+
+  get householdId(): string {
+    return this._householdId;
+  }
+
+  get household(): Household {
+    return this._household;
+  }
   // tslint:disable-next-line:variable-name
   private _householdId: string;
   // tslint:disable-next-line:variable-name
   private _household: Household;
 
-  constructor(
-    private afs: AngularFirestore,
-    private appAuth: AuthService,
-  ) {
+  private static docRefToHousehold(doc: QueryDocumentSnapshot<any>): Household {
+    const hh: Household = doc.data() as Household;
+    hh.id = doc.ref.id;
+    return hh;
   }
 
   createHousehold(displayName: string) {
@@ -30,6 +43,7 @@ export class HouseholdManagerService {
         const data: Household = {
           displayName,
           members: [],
+          users: [user.uid]
         };
 
         this._household = data;
@@ -52,12 +66,13 @@ export class HouseholdManagerService {
 
   }
 
-  get householdId(): string {
-    return this._householdId;
-  }
-
-  get household(): Household {
-    return this._household;
+  setHousehold(id: string) {
+    this.getHousehold(id).subscribe( household => {
+      if (household) {
+        this._householdId = id;
+        this._household = household;
+      }
+    });
   }
 
   updateHousehold(id: string, data: Household) {
@@ -66,16 +81,13 @@ export class HouseholdManagerService {
     docRef.set(data);
   }
 
-  // set householdId(value: string) {
-  //   this._householdId = value;
-  // }
   getHousehold(id: string): Observable<Household> {
     const docRef = this.afs.collection('households').doc<Household>(id);
 
     return new Observable<Household>(subscriber => {
       docRef.get().subscribe(doc => {
         if (doc.exists) {
-          subscriber.next(doc.data() as Household);
+          subscriber.next(HouseholdManagerService.docRefToHousehold(doc));
         } else {
           subscriber.error(
             'Error getting document'
@@ -83,6 +95,27 @@ export class HouseholdManagerService {
         }
       });
     });
+  }
 
+  getHouseholdsByUser(id: string): Observable<Array<Household>> {
+    return new Observable<Array<Household>>( subscriber => {
+
+      const householdsRef = this.afs.collection('households');
+      const query = householdsRef.ref.where('users', 'array-contains', id);
+
+      query
+        .get()
+        .then(querySnapshot => {
+          const households: Array<Household> = [];
+
+          querySnapshot.forEach( (doc) => {
+            households.push(HouseholdManagerService.docRefToHousehold(doc));
+          });
+
+          subscriber.next(households);
+
+          subscriber.complete();
+        });
+    });
   }
 }
