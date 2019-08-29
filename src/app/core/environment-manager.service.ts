@@ -22,6 +22,7 @@ export class EnvironmentManagerService {
   ) {
     this.appAuth.user$.subscribe( user => {
       if (user && user.defaultEnvironment && !this.isCurrentEnvironment(user.defaultEnvironment)) {
+        console.log('updating environment due to user change: ' + user.defaultEnvironment);
         this.setEnvironment(user.defaultEnvironment);
       }
     });
@@ -79,6 +80,8 @@ export class EnvironmentManagerService {
         this.environment$ = environment;
         this.environment$.id = id;
       }
+
+      // console.log('setting environment');
     });
 
     // this.appAuth.setDefaultEnvironment(id);

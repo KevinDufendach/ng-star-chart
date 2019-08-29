@@ -4,11 +4,11 @@ import {UserService} from '../core/user.service';
 import {Environment} from '../core/environment';
 
 @Component({
-  selector: 'app-create-environment',
-  templateUrl: './create-environment.component.html',
-  styleUrls: ['./create-environment.component.scss']
+  selector: 'app-environments',
+  templateUrl: './environments.component.html',
+  styleUrls: ['./environments.component.scss']
 })
-export class CreateEnvironmentComponent implements OnInit {
+export class EnvironmentsComponent implements OnInit {
   environments: Array<Environment>;
 
   constructor(
@@ -17,24 +17,19 @@ export class CreateEnvironmentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.hms.getEnvironmentsByUser('QuxpgpUuZ1ekTNPK05co8ctTeMJ3').subscribe(value => {
-      this.environments = value;
+    this.getEnvironments();
+  }
+
+  getEnvironments() {
+    this.appAuth.user$.subscribe( user => {
+      this.hms.getEnvironmentsByUser(user.uid).subscribe(value => {
+        this.environments = value;
+      });
     });
   }
 
   createEnvironment() {
     this.hms.createEnvironment('My Environment');
-  }
-
-  editEnvironment() {
-
-  }
-
-  getEnvironments() {
-    this.hms.getEnvironmentsByUser('QuxpgpUuZ1ekTNPK05co8ctTeMJ3').subscribe(value => {
-      console.log(value);
-      this.environments = value;
-    });
   }
 
   setEnvironment(id: string) {

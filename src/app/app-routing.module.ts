@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {PrivacyPolicyComponent} from './privacy-policy/privacy-policy.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {EditEnvironmentComponent} from './edit-environment/edit-environment.component';
+import {EnvironmentsComponent} from './environments/environments.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'environments',
+    component: EnvironmentsComponent,
   },
   {
     path: 'environment/edit/:id',
