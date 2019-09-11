@@ -85,4 +85,10 @@ export class HouseholdManagerService {
     });
 
   }
+
+  getHouseholdsForUser(id: string) {
+    const householdsRef = this.afs.collection('households');
+
+    // const query = householdsRef.where()
+  }
 }
