@@ -8,13 +8,14 @@ import {
 } from '@angular/fire/firestore';
 import {Environment, EnvironmentPrivateData} from './environment';
 import {UserService} from './user.service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnvironmentManagerService {
-  private environment$: Environment;
+  private environmentId: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private environment$: BehaviorSubject<Environment> = new BehaviorSubject<Environment>(null);
 
   constructor(
     private afs: AngularFirestore,
@@ -35,11 +36,11 @@ export class EnvironmentManagerService {
   }
 
   private isCurrentEnvironment(envId: string) {
-    return (this.environment$ && this.environment$.id === envId);
+    return (this.environmentId.getValue() === envId);
   }
 
   get environment(): Environment {
-    return this.environment$;
+    return this.environment$.getValue();
   }
 
   createEnvironment(displayName: string) {
@@ -57,7 +58,7 @@ export class EnvironmentManagerService {
           id: newDocId,
         };
 
-        this.environment$ = data;
+        this.environment$.next(data as Environment);
 
         newEnvDoc.set(data).then(d => {
           // Add creator as owner of new environment
@@ -75,16 +76,12 @@ export class EnvironmentManagerService {
   }
 
   setEnvironment(id: string) {
-    this.getEnvironment(id).subscribe( environment => {
-      if (environment) {
-        this.environment$ = environment;
-        this.environment$.id = id;
-      }
-
-      // console.log('setting environment');
-    });
-
-    // this.appAuth.setDefaultEnvironment(id);
+    if (!this.isCurrentEnvironment(id)) {
+      this.getEnvironment(id).subscribe( environment => {
+        console.log('getting environment: ' + id);
+        this.environment$.next(environment);
+      });
+    }
   }
 
   updateEnvironment(id: string, data: Environment) {

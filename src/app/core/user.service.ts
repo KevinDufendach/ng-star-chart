@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AppUser} from './app-user';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {auth, User} from 'firebase/app';
 import UserCredential = auth.UserCredential;
@@ -11,6 +11,7 @@ import UserCredential = auth.UserCredential;
   providedIn: 'root'
 })
 export class UserService {
+  userId: BehaviorSubject<string>;
   user$: Observable<AppUser>;
 
   constructor(private afAuth: AngularFireAuth,
@@ -19,6 +20,7 @@ export class UserService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
+          this.userId.next(user.uid);
           return this.afs.doc<AppUser>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
@@ -98,7 +100,12 @@ export class UserService {
     return false;
   }
 
+  getUserId(): BehaviorSubject<string> {
+    return this.userId;
+  }
+
   setDefaultEnvironment(envId: string) {
+
     if (this.user$) {
       this.user$.subscribe(appUser => {
         this.updateUserData(appUser.uid, {defaultEnvironment: envId} );
