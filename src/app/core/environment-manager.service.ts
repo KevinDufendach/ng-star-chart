@@ -152,8 +152,4 @@ export class EnvironmentManagerService {
         });
     });
   }
-
-  hasEnvironment(id: string) {
-    return false;
-  }
 }
