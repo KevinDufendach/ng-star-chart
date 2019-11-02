@@ -26,6 +26,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
+import { EnvironmentDashboardComponent } from './environment-dashboard/environment-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {FormsModule} from '@angular/forms';
     MainNavComponent,
     CreateEnvironmentComponent,
     EditEnvironmentComponent,
+    EnvironmentDashboardComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,7 +11,6 @@ import {first} from 'rxjs/operators';
 })
 export class CreateEnvironmentComponent implements OnInit {
   environments: Array<Environment>;
-  userId: string;
 
   constructor(
     public ems: EnvironmentManagerService,
