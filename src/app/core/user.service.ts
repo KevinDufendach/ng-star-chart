@@ -2,22 +2,21 @@ import {Injectable} from '@angular/core';
 import {AppUser} from './app-user';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Router} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
-import * as firebase from 'firebase';
-import UserCredential = firebase.auth.UserCredential;
+import {auth, User} from 'firebase/app';
+import UserCredential = auth.UserCredential;
+import App = firebase.app.App;
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-
+export class UserService {
   user$: Observable<AppUser>;
+  userId$ = new BehaviorSubject<string>('');
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,
-              private router: Router) {
+              private afs: AngularFirestore) {
     //// Get auth data, then get firestore user document || null
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -28,27 +27,25 @@ export class AuthService {
         }
       })
     );
+
+    this.user$.subscribe(user => {
+      // console.log('UserService userId$: ' + this.userId$.value);
+
+      if (user && user.uid !== this.userId$.value) {
+        this.userId$.next(user.uid);
+      }
+    });
   }
 
   googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   private oAuthLogin(provider): Promise<void | UserCredential> {
-    console.log('starting oAuthLogin');
-
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        console.log('user retrieved: ' + credential.user.displayName);
-
-        this.updateUserData(credential.user)
-          .then( () => {
-            console.log('user successfully written');
-          })
-          .catch( () => {
-            console.log('error writing user');
-          });
+        this.updateUserWithAuthData(credential.user);
       });
   }
 
@@ -56,7 +53,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  private updateUserData(user): Promise<void> {
+  private updateUserWithAuthData(user: User): Promise<void> {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data: AppUser = {
@@ -69,6 +66,13 @@ export class AuthService {
     };
 
     return userRef.set(data, {merge: true});
+  }
+
+  private updateUserData(uid: string, newData: any): Promise<void> {
+
+
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+    return userRef.update(newData);
   }
 
   // Abilities and roles authorization
@@ -102,5 +106,22 @@ export class AuthService {
     }
 
     return false;
+  }
+
+  setDefaultEnvironment(envId: string) {
+    if (this.user$) {
+      this.user$.subscribe(appUser => {
+        this.updateUserData(appUser.uid, {defaultEnvironment: envId} );
+      });
+    }
+
+    // //// Get auth data, then get firestore user document || null
+    // this.user$.subscribe(appUser => {
+    //   if (appUser) {
+    //     appUser.defaultEnvironment = envId;
+    //
+    //     this.updateUserData(appUser);
+    //   }
+    // });
   }
 }

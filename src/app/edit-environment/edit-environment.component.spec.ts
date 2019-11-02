@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditHouseholdComponent } from './edit-household.component';
+import { EditEnvironmentComponent } from './edit-environment.component';
 
-describe('EditHouseholdComponent', () => {
-  let component: EditHouseholdComponent;
-  let fixture: ComponentFixture<EditHouseholdComponent>;
+describe('EditEnvironmentComponent', () => {
+  let component: EditEnvironmentComponent;
+  let fixture: ComponentFixture<EditEnvironmentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditHouseholdComponent ]
+      declarations: [ EditEnvironmentComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditHouseholdComponent);
+    fixture = TestBed.createComponent(EditEnvironmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

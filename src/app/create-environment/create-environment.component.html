@@ -1,0 +1,25 @@
+<ng-container *ngIf="appAuth.user$ | async">
+  <ng-container *ngIf="appAuth.user$ | async as user">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Environments for {{ user.displayName }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h2>Select Environment</h2>
+        <div *ngFor="let environment of environments">
+          <button mat-raised-button (click)="setEnvironment(environment.id)">{{environment.displayName}}</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</ng-container>
+
+<div *ngIf="ems.environment">
+  <h2>
+    <span>Current Environment: {{ems.environment.displayName}} </span>
+    <button mat-raised-button routerLink="/environment/edit/{{ems.environment.id}}">Edit Environment</button>
+  </h2>
+
+</div>
+
+<button mat-raised-button (click)="createEnvironment()">Create New Environment</button>
