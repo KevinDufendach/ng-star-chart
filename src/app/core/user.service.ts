@@ -111,6 +111,7 @@ export class UserService {
   setDefaultEnvironment(envId: string) {
     if (this.user$) {
       this.user$.subscribe(appUser => {
+        console.log('Setting environment');
         this.updateUserData(appUser.uid, {defaultEnvironment: envId} );
       });
     }
