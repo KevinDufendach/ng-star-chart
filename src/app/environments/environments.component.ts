@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EnvironmentManagerService} from '../core/environment-manager.service';
 import {UserService} from '../core/user.service';
 import {Environment} from '../core/environment';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-environments',
@@ -10,30 +11,32 @@ import {Environment} from '../core/environment';
 })
 export class EnvironmentsComponent implements OnInit {
   environments: Array<Environment>;
+  userId: string;
 
   constructor(
-    public hms: EnvironmentManagerService,
+    public ems: EnvironmentManagerService,
     public appAuth: UserService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.getEnvironments();
+    this.subscribeToUserChanges();
   }
 
-  getEnvironments() {
-    this.appAuth.user$.subscribe( user => {
-      this.hms.getEnvironmentsByUser(user.uid).subscribe(value => {
-        this.environments = value;
-      });
-    });
-  }
-
-  createEnvironment() {
-    this.hms.createEnvironment('My Environment');
+  createEnvironment(environmentName) {
+    this.ems.createEnvironment(environmentName);
   }
 
   setEnvironment(id: string) {
-    this.hms.setEnvironment(id);
+    this.ems.setEnvironment(id);
     this.appAuth.setDefaultEnvironment(id);
+  }
+
+  private subscribeToUserChanges() {
+    this.appAuth.userId$.subscribe(uid => {
+      this.ems.getEnvironmentsByUser(uid).pipe(first()).subscribe( envs => {
+        this.environments = envs;
+      });
+    });
   }
 }

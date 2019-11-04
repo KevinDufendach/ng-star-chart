@@ -1,31 +1,32 @@
 import {Injectable} from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
   AngularFirestoreDocument,
-  DocumentReference,
   QueryDocumentSnapshot
 } from '@angular/fire/firestore';
 import {Environment, EnvironmentPrivateData} from './environment';
 import {UserService} from './user.service';
 import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnvironmentManagerService {
-  private environment$: Environment;
+  private activeEnvironment: Environment;
+  private userId: string;
 
   constructor(
     private afs: AngularFirestore,
     private appAuth: UserService,
   ) {
-    this.appAuth.user$.subscribe( user => {
-      if (user && user.defaultEnvironment && !this.isCurrentEnvironment(user.defaultEnvironment)) {
-        console.log('updating environment due to user change: ' + user.defaultEnvironment);
-        this.setEnvironment(user.defaultEnvironment);
-      }
-    });
+    this.subscribeToUserChanges();
+
+    // this.appAuth.user$.subscribe( user => {
+    //   if (user && user.defaultEnvironment && !this.isCurrentEnvironment(user.defaultEnvironment)) {
+    //     this.setEnvironment(user.defaultEnvironment);
+    //   }
+    // });
   }
 
   private static docRefToEnvironment(doc: QueryDocumentSnapshot<any>): Environment {
@@ -35,17 +36,38 @@ export class EnvironmentManagerService {
   }
 
   private isCurrentEnvironment(envId: string) {
-    return (this.environment$ && this.environment$.id === envId);
+    return (this.activeEnvironment && this.activeEnvironment.id === envId);
   }
 
   get environment(): Environment {
-    return this.environment$;
+    return this.activeEnvironment;
   }
 
-  createEnvironment(displayName: string) {
+  private subscribeToUserChanges() {
+    this.appAuth.user$.subscribe(user => {
+      if (user && user.uid !== this.userId) {
+        this.userId = user.uid;
 
-    this.appAuth.user$.subscribe((user) => {
-      if (user) {
+        console.log('Env SVC: user login/change detected. ' + user.uid);
+        this.setEnvironment(user.defaultEnvironment);
+      }
+    });
+  }
+
+  // retrieveUserEnvironments(user: AppUser): Observable<Environment[]> {
+  //   return new Observable<Environment[]>(subscriber => {
+  //     this.getEnvironmentsByUser(user.uid).subscribe(envs => {
+  //       this.environments = envs;
+  //       subscriber.next(this.environments);
+  //     });
+  //   });
+  // }
+
+  createEnvironment(displayName: string): Observable<Environment> {
+    return new Observable<Environment>(subscriber => {
+
+      // pipe(first... gets the first user piped in, then unsubscribes
+      this.appAuth.user$.pipe(first(user => (user !== null))).subscribe((user) => {
         // const environmentCollectionRef: AngularFirestoreCollection<any> = this.afs.collection('environments');
         const newDocId = this.afs.createId();
         const newEnvDoc: AngularFirestoreDocument = this.afs.collection('environments').doc(newDocId);
@@ -57,7 +79,7 @@ export class EnvironmentManagerService {
           id: newDocId,
         };
 
-        this.environment$ = data;
+        this.activeEnvironment = data;
 
         newEnvDoc.set(data).then(d => {
           // Add creator as owner of new environment
@@ -68,17 +90,18 @@ export class EnvironmentManagerService {
 
           newEnvDoc.collection('private_data').doc('private').set(privateData);
         });
-      } else {
-        console.log('user not logged in');
-      }
+
+        subscriber.next(this.activeEnvironment);
+      });
+
     });
   }
 
   setEnvironment(id: string) {
     this.getEnvironment(id).subscribe( environment => {
       if (environment) {
-        this.environment$ = environment;
-        this.environment$.id = id;
+        this.activeEnvironment = environment;
+        this.activeEnvironment.id = id;
       }
 
       // console.log('setting environment');
@@ -102,6 +125,7 @@ export class EnvironmentManagerService {
           subscriber.next(EnvironmentManagerService.docRefToEnvironment(doc));
         } else {
           subscriber.error(
+            // TODO: Need to secure cloud firestore rules so can only get env if user
             'Error getting document'
           );
         }
@@ -129,5 +153,9 @@ export class EnvironmentManagerService {
           subscriber.complete();
         });
     });
+  }
+
+  hasEnvironment(id: string) {
+    return false;
   }
 }

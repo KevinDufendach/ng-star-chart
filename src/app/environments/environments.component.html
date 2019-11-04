@@ -14,12 +14,12 @@
   </ng-container>
 </ng-container>
 
-<div *ngIf="hms.environment">
+<div *ngIf="ems.environment">
   <h2>
-    <span>Current Environment: {{hms.environment.displayName}} </span>
-    <button mat-raised-button routerLink="/environment/edit/{{hms.environment.id}}">Edit Environment</button>
+    <span>Current Environment: {{ems.environment.displayName}} </span>
+    <button mat-raised-button routerLink="/environment/edit/{{ems.environment.id}}">Edit Environment</button>
   </h2>
 
 </div>
 
-<button mat-raised-button (click)="createEnvironment()">Create New Environment</button>
+<button mat-raised-button (click)="createEnvironment('My New Environment')">Create New Environment</button>

@@ -2,16 +2,18 @@ import {Injectable} from '@angular/core';
 import {AppUser} from './app-user';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {auth, User} from 'firebase/app';
 import UserCredential = auth.UserCredential;
+import App = firebase.app.App;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   user$: Observable<AppUser>;
+  userId$ = new BehaviorSubject<string>('');
 
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore) {
@@ -25,6 +27,14 @@ export class UserService {
         }
       })
     );
+
+    this.user$.subscribe(user => {
+      // console.log('UserService userId$: ' + this.userId$.value);
+
+      if (user && user.uid !== this.userId$.value) {
+        this.userId$.next(user.uid);
+      }
+    });
   }
 
   googleLogin() {
