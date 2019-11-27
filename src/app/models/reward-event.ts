@@ -1,4 +1,4 @@
-export interface Event {
+export interface RewardEvent {
   id: string;
   date: Date;
   label: string;

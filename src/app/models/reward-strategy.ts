@@ -1,4 +1,4 @@
 export interface RewardStrategy {
   id: string;
-  calculate(): number;
+  calculate(params): number;
 }
