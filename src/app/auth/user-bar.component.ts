@@ -7,7 +7,6 @@ import {UserService} from '../core/user.service';
   styleUrls: ['./user-bar.component.scss']
 })
 export class UserBarComponent {
-  @Input() showMenuBar: boolean;
   @Output() menuButtonClick = new EventEmitter<null>();
 
   _notifyMenuClicked() {

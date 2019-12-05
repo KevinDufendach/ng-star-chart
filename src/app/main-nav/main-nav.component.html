@@ -1,8 +1,8 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item href="#">Link 1</a>
@@ -11,8 +11,8 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-user-bar [showMenuBar]="isHandset$ | async" (menuButtonClick)="drawer.toggle()"></app-user-bar>
-    <div>isHandset: {{isHandset$ | async}}</div>
+    <app-user-bar (menuButtonClick)="drawer.toggle()"></app-user-bar>
+    <!--    <div>isHandset: {{isHandset$ | async}}</div>-->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

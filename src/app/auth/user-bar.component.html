@@ -4,12 +4,10 @@
     aria-label="Toggle sidenav"
     mat-icon-button
     (click)="_notifyMenuClicked()"
-    *ngIf="showMenuBar">
+    fxHide.gt-md>
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
-  <button mat-button routerLink="/">
-    <h1>Star Chart</h1>
-  </button>
+  <button mat-button routerLink="/">Star Chart</button>
   <span fxFlex></span>
 
   <ng-container *ngIf="auth.user$ | async; then authenticated else showLogin">

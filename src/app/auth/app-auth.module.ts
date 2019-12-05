@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {UserBarComponent} from './user-bar.component';
 import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/material';
-import {FlexModule} from '@angular/flex-layout';
+import {FlexLayoutModule, FlexModule} from '@angular/flex-layout';
 import {RouterModule} from '@angular/router';
 
 @NgModule({
@@ -12,13 +12,14 @@ import {RouterModule} from '@angular/router';
   exports: [
     UserBarComponent
   ],
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    FlexModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule
-  ]
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        FlexModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterModule,
+        FlexLayoutModule
+    ]
 })
 export class AppAuthModule { }
