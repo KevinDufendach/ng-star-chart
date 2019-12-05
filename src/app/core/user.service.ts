@@ -6,7 +6,6 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {auth, User} from 'firebase/app';
 import UserCredential = auth.UserCredential;
-import App = firebase.app.App;
 
 @Injectable({
   providedIn: 'root'

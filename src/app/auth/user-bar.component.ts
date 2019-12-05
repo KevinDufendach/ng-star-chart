@@ -10,12 +10,9 @@ export class UserBarComponent {
   @Input() showMenuBar: boolean;
   @Output() menuButtonClick = new EventEmitter<null>();
 
-  canEdit;
-
   _notifyMenuClicked() {
     this.menuButtonClick.emit();
   }
-
 
   constructor(public auth: UserService) { }
 }
