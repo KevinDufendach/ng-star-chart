@@ -103,6 +103,8 @@ export class EnvironmentManagerService {
         this.activeEnvironment = environment;
         this.activeEnvironment.id = id;
       }
+
+      // console.log('setting environment');
     });
 
     // this.appAuth.setDefaultEnvironment(id);

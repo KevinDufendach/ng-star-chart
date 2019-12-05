@@ -5,11 +5,11 @@ import {Environment} from '../core/environment';
 import {first} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-create-environment',
-  templateUrl: './create-environment.component.html',
-  styleUrls: ['./create-environment.component.scss']
+  selector: 'app-environments',
+  templateUrl: './environments.component.html',
+  styleUrls: ['./environments.component.scss']
 })
-export class CreateEnvironmentComponent implements OnInit {
+export class EnvironmentsComponent implements OnInit {
   environments: Array<Environment>;
 
   constructor(
@@ -20,20 +20,10 @@ export class CreateEnvironmentComponent implements OnInit {
 
   ngOnInit() {
     this.subscribeToUserChanges();
-
-    // const userId = 'QuxpgpUuZ1ekTNPK05co8ctTeMJ3';
-    // console.log('getting environments for userId: ' + userId);
-    // this.ems.getEnvironmentsByUser(userId).subscribe(value => {
-    //   this.environments = value;
-    // });
   }
 
   createEnvironment(environmentName) {
     this.ems.createEnvironment(environmentName);
-  }
-
-  editEnvironment() {
-
   }
 
   setEnvironment(id: string) {

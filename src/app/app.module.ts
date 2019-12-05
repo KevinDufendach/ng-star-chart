@@ -20,7 +20,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import {FlexModule} from '@angular/flex-layout';
-import {CreateEnvironmentComponent} from './create-environment/create-environment.component';
+import {EnvironmentsComponent} from './environments/environments.component';
 import { EditEnvironmentComponent } from './edit-environment/edit-environment.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -35,7 +35,7 @@ import { EnvironmentDashboardComponent } from './environment-dashboard/environme
     DashboardComponent,
     EditRulesComponent,
     MainNavComponent,
-    CreateEnvironmentComponent,
+    EnvironmentsComponent,
     EditEnvironmentComponent,
     EnvironmentDashboardComponent,
   ],
